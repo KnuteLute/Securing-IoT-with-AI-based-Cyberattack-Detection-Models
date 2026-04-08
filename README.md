@@ -2,15 +2,18 @@
 
 This repository accompanies the paper **"Securing IoT with AI-based Cyberattack Detection Models using Real-World Testbeds and Datasets"**.
 
-It contains the preprocessing and TensorFlow training pipeline used to build cyberattack detection models for network traffic classification. The repository is designed to work with external data that must be prepared separately; the raw packet captures are **not stored in the repository**.
+It contains the preprocessing and TensorFlow training pipeline used to build cyberattack detection models for network traffic classification. Data can be used in two ways:
+
+- via externally prepared raw packet captures (`.pcapng`), or
+- via pre-generated CSV feature files if they are included in this repository.
 
 ## Overview
 
 The workflow is:
 
-1. Collect or obtain `.pcapng` packet captures from a separate dataset source.
-2. Preprocess the packet captures into windowed CSV feature files.
-3. Train TensorFlow models on the generated CSV data.
+1. Use pre-generated CSV feature files from `NorFin_csv/` (if present), **or** collect `.pcapng` captures.
+2. If needed, preprocess the packet captures into windowed CSV feature files.
+3. Train TensorFlow models on the CSV data.
 4. Review saved model artifacts, metrics, confusion matrices, and feature importance results.
 
 The project targets these traffic categories:
@@ -36,16 +39,16 @@ The project targets these traffic categories:
 
 ## Important Note About Data
 
-This repository does **not** contain the full dataset required to reproduce the experiments.
+This repository may include preprocessed CSV data in `NorFin_csv/`. If CSV files are available, you can train directly without running preprocessing.
 
-You must prepare the data separately and place it in the expected folder structure before running preprocessing or training.
+For full reproduction from raw traffic, the complete `.pcapng` dataset is still expected to be prepared separately and placed in the expected folder structure.
 
 Expected input structure:
 
 - `NorFin_Lab/Attack_Data_Subtype_Labels/<attack folder>/*.pcapng`
 - `NorFin_Lab/benign_data/<benign folder>/*.pcapng`
 
-Expected generated output structure:
+Expected CSV structure (either generated locally or already provided):
 
 - `NorFin_csv/<attack folder>/*.csv`
 - `NorFin_csv/<benign folder>/*.csv`
@@ -85,6 +88,8 @@ Make sure `tshark` runs from the command line before preprocessing packet captur
 ## Workflow
 
 ### Step 1: Prepare the raw captures
+
+If `NorFin_csv/` already contains CSV files, you can skip directly to training.
 
 Place the `.pcapng` files into the expected folder structure under `NorFin_Lab/`.
 
@@ -192,6 +197,8 @@ To reproduce a full run from scratch:
 3. Install Python dependencies and `tshark`.
 4. Run preprocessing to generate CSV windows.
 5. Run training to produce the final TensorFlow models and evaluation outputs.
+
+If pre-generated CSV files are already available in `NorFin_csv/`, you can skip steps 1-4 and run training directly.
 
 ## Adding New Data
 
